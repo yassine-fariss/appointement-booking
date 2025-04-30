@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="logo" src="./FrontEnd/public/img/logo.png" width="224px"/><br/> <em>DocAppoint</em> Is For Doctors To Manage Patient Appointment
+  <img alt="logo" src="./FrontEnd/public/img/logo.png" width="224px"/><br/> <em>DocAppoint</em> Pour les Médecins pour Gérer les Rendez-vous des Patients
 </h1>
 
 ---
@@ -16,123 +16,170 @@
 
   <img alt="" src="https://img.shields.io/github/repo-size/mouad-dadda/Doctors-Appointment-Management?style=for-the-badge&color=1877F2" />
 
-
 </p>
 
-<p align="center"><em> Welcome to DocAppoint, a comprehensive platform designed to simplify management patient appointment . This project facilitates doctors in registering , enabling doctors to efficiently engage with patients through appointment requests.</em> </p>
+---
 
-<hr>
+## 🌐 française
 
-###  🃏Running Locally
+### Introduction
+Bienvenue sur DocAppoint, une plateforme complète conçue pour simplifier la gestion des rendez-vous des patients. Ce projet permet aux médecins de s'inscrire, de gérer facilement leurs horaires et aux patients de prendre des rendez-vous en fonction des disponibilités.
 
-**⚡Prerequisites**
+---
 
+### 🃏 Exécution locale
+
+**⚡ Pré-requis**
 - npm v8.15.0
 - node v16.17.0
 - composer v2.4.2
 - php v8.1.4
 
-Follow these steps to set up and run DocAppoint on your local machine:
+**Étapes :**
+1. Clonez le projet :
+   ```bash
+   git clone https://github.com/mouad-dadda/Doctors-Appointment-Management.git
+   ```
+2. Naviguez dans les dossiers backend et frontend, installez les dépendances et démarrez les serveurs.
 
-#### 📌Clone the project
-
+Pour le frontend :
 ```bash
-  git clone https://github.com/mouad-dadda/Doctors-Appointment-Management.git
+cd FrontEnd
+npm install
+npm start
 ```
 
-go to the project directory
-
-Navagate to the backend and frontend folder, install dependencies and start the server
-
-#### 📌For the frontend
-
-```bash
-  cd FrontEnd
-  npm install
-  npm start
-```
-
-#### 📌For the backend
-
-- Create your database
-
-  - Rename .env.example to .env Or copy it and paste at project root directory and name the file .env.You can also use this command.
+Pour le backend :
+- Créez votre base de données.
+- Renommez `.env.example` en `.env` et configurez la connexion à votre base de données.
 
 ```bash
 cd BackEnd
 cp .env.example ./.env
-```
-
-- Generate app key with this command
-
-```bash
 php artisan key:generate
 ```
 
-- Set database connection to your database in the .env file.
-
+- Démarrez le serveur local :
 ```bash
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=YourDatabease
-DB_USERNAME=Name
-DB_PASSWORD=Pass
+composer install
+php artisan serve
 ```
 
-- Start the local server and browser to your app.
-
-```bash
-  composer install
-  php artisan serve
-```
-
-- if you want to have some sample data run
-
-```bash
-  php artisan migrate
-  php artisan db:seed
-```
-
-or
-
+- Exécutez les migrations et les seeders pour des données d'exemple :
 ```bash
 php artisan migrate --seed
 ```
 
-<hr>
+---
 
-### 💻Key Features:
+### 💻 Fonctionnalités principales
 
-- **Doctor Registration:** Effortlessly create accounts by providing professional details and credentials.
+- **Inscription des médecins :** Créez facilement des comptes en fournissant des détails professionnels et des identifiants.
+- **Administrateur :** Vérifiez et activez les comptes des médecins.
+- **Demandes de rendez-vous simplifiées :** Les médecins vérifiés gèrent les horaires ; les patients demandent des rendez-vous en fonction des disponibilités.
+- **Tableau de bord complet :** Permet aux administrateurs de gérer les comptes des médecins, de vérifier les inscriptions et de surveiller l'activité de la plateforme.
 
-- **Administrator :** Verify and activate doctor accounts.
+---
 
-- **Seamless Appointment Requests:** Verified doctors manage schedules; patients request appointments based on availability.
-
-- **Comprehensive Dashboard:** Empower administrators to manage doctor accounts, verify registrations, and monitor platform activity.
-
-⚠ <em> The Project is not complete and there is more to be added </em>
-
-<hr>
-
-### 🌙Technologies
+### 🌙 Technologies
 
 <p align="center">
-    <img src="https://skillicons.dev/icons?i=laravel,react,redux,mysql,tailwind"  alt=" Language" />
+    <img src="https://skillicons.dev/icons?i=laravel,react,redux,mysql,tailwind"  alt="Technologies" />
 </p>
 
-<hr>
+---
 
-### 📃License:
+### 📃 Licence
 
-This project is licensed under the <a href="./LICENSE">MIT License.</a>
+Ce projet est sous licence [MIT License](./LICENSE).
 
-<hr>
+---
 
-### 📩Contact:
+### 📩 Contact
 
+Pour toute question, n'hésitez pas à nous contacter via :
   <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"  alt="Gmail" />
-
   <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white"  alt="Twitter" />
 
+---
+
+## 🌐 English
+
+### Introduction
+Welcome to DocAppoint, a comprehensive platform designed to simplify the management of patient appointments. This project facilitates doctors in registering, enabling them to easily manage their schedules, and allowing patients to book appointments based on availability.
+
+---
+
+### 🃏 Running Locally
+
+**⚡ Prerequisites**
+- npm v8.15.0
+- node v16.17.0
+- composer v2.4.2
+- php v8.1.4
+
+**Steps:**
+1. Clone the project:
+   ```bash
+   git clone https://github.com/mouad-dadda/Doctors-Appointment-Management.git
+   ```
+2. Navigate to the backend and frontend folders, install dependencies, and start the servers.
+
+For the frontend:
+```bash
+cd FrontEnd
+npm install
+npm start
+```
+
+For the backend:
+- Create your database.
+- Rename `.env.example` to `.env` and set up your database connection.
+
+```bash
+cd BackEnd
+cp .env.example ./.env
+php artisan key:generate
+```
+
+- Start the local server:
+```bash
+composer install
+php artisan serve
+```
+
+- Run migrations and seeders for sample data:
+```bash
+php artisan migrate --seed
+```
+
+---
+
+### 💻 Key Features
+
+- **Doctor Registration:** Effortlessly create accounts by providing professional details and credentials.
+- **Administrator:** Verify and activate doctor accounts.
+- **Seamless Appointment Requests:** Verified doctors manage schedules; patients request appointments based on availability.
+- **Comprehensive Dashboard:** Empower administrators to manage doctor accounts, verify registrations, and monitor platform activity.
+
+---
+
+### 🌙 Technologies
+
+<p align="center">
+    <img src="https://skillicons.dev/icons?i=laravel,react,redux,mysql,tailwind"  alt="Technologies" />
+</p>
+
+---
+
+### 📃 License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+---
+
+### 📩 Contact
+
+For inquiries, feel free to reach out via:
+  <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"  alt="Gmail" />
+  <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white"  alt="Twitter" />
