@@ -40,7 +40,7 @@ class AppointmentManagementController extends Controller
       'date_appointment' => $data['date_appointment'],
       'time_appointment' => $data['time_appointment'],
       'type_appointment' => $data['type_appointment'],
-      'status' => 'Pending'
+      'status' => 'Confirmed'
     ]);
 
     $doctor = Doctor::find($data['doctor_id']);
@@ -127,6 +127,7 @@ class AppointmentManagementController extends Controller
   {
       $appointments = Appointment::with('doctor')
         ->where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
         ->get();
 
       return response()->json($appointments);

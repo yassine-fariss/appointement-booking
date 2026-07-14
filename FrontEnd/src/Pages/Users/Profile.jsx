@@ -493,7 +493,17 @@ const Profile = () => {
                               </p>
                               <p className="text-xs text-gray-400 mt-1">
                                 Fee: <span className="font-semibold text-gray-700">{appt.doctor?.consultation_fee || "N/A"} MAD</span> • 
-                                Status: <span className={`ml-1 font-semibold ${appt.status === 'Confirmed' ? 'text-green-600' : 'text-orange-500'}`}>{appt.status || "Pending"}</span>
+                                Status: 
+                                <span className={`inline-flex items-center gap-1.5 ml-2 text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
+                                  appt.status === 'Confirmed' 
+                                    ? 'bg-green-50 text-green-700 border-green-200' 
+                                    : 'bg-orange-50 text-orange-700 border-orange-200'
+                                }`}>
+                                  <span className={`w-1.5 h-1.5 rounded-full ${
+                                    appt.status === 'Confirmed' ? 'bg-green-500' : 'bg-orange-500'
+                                  }`}></span>
+                                  {appt.status || "Pending"}
+                                </span>
                               </p>
                             </div>
                           </div>
@@ -648,7 +658,17 @@ const Profile = () => {
                               </p>
                               <p className="text-xs text-gray-400 mt-1">
                                 Fee: <span className="font-semibold text-gray-700">{appt.doctor?.consultation_fee || "N/A"} MAD</span> • 
-                                Status: <span className={`ml-1 font-semibold ${appt.status === 'Confirmed' ? 'text-green-600' : 'text-orange-500'}`}>{appt.status || "Pending"}</span>
+                                Status: 
+                                <span className={`inline-flex items-center gap-1.5 ml-2 text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
+                                  appt.status === 'Confirmed' 
+                                    ? 'bg-green-50 text-green-700 border-green-200' 
+                                    : 'bg-orange-50 text-orange-700 border-orange-200'
+                                }`}>
+                                  <span className={`w-1.5 h-1.5 rounded-full ${
+                                    appt.status === 'Confirmed' ? 'bg-green-500' : 'bg-orange-500'
+                                  }`}></span>
+                                  {appt.status || "Pending"}
+                                </span>
                               </p>
                             </div>
                           </div>
