@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -7,11 +7,23 @@ import {
   Mail,
   Phone,
   Clock,
+  Send,
 } from "lucide-react";
 
-const Footer = ({ colorText }) => {
+const Footer = () => {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (email) {
+      setSubscribed(true);
+      setEmail("");
+      setTimeout(() => setSubscribed(false), 5000);
+    }
+  };
 
   // Animation variants for columns
   const columnVariants = {
@@ -19,259 +31,270 @@ const Footer = ({ colorText }) => {
     visible: (i) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.1, duration: 0.5 },
+      transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" },
     }),
-  };
-
-  const iconHover = {
-    scale: 1.12,
-    transition: { type: "spring", stiffness: 300 },
   };
 
   return (
     <motion.footer
-      className="bg-white border-t border-gray-300 shadow-lg rounded-t-lg py-12"
-      initial={{ opacity: 0, y: 20 }}
+      className="bg-gradient-to-b from-gray-50 to-white border-t border-gray-150 py-16 text-gray-600"
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.6 }}
       data-testid="footer"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Main grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Company Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Newsletter Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 md:p-12 shadow-xl shadow-blue-500/10 flex flex-col lg:flex-row items-center justify-between gap-8 mb-16 text-white text-left">
+          <div className="space-y-2 max-w-xl">
+            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+              {t("footer.stayUpdated", "Stay Updated")}
+            </h3>
+            <p className="text-blue-100 text-sm md:text-base font-medium">
+              {t("footer.newsletterText", "Subscribe to our newsletter for the latest healthcare insights, features, and wellness tips.")}
+            </p>
+          </div>
+          <div className="w-full lg:w-auto">
+            {subscribed ? (
+              <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/30 text-white font-bold text-center text-sm"
+              >
+                🎉 {t("footer.subscribedMessage", "Thank you for subscribing!")}
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex w-full lg:w-auto max-w-md items-center bg-white/10 backdrop-blur-md p-1.5 rounded-2xl border border-white/20">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t("footer.emailPlaceholder", "Enter your email address")}
+                  className="w-full lg:w-64 bg-transparent border-0 text-white placeholder-blue-200 focus:ring-0 focus:outline-none px-4 text-sm font-medium"
+                  required
+                  aria-label="Email Address"
+                />
+                <button
+                  type="submit"
+                  className="bg-white text-blue-700 hover:bg-blue-50 active:scale-95 transition-all px-6 py-3 rounded-xl font-bold text-sm shadow-md whitespace-nowrap cursor-pointer flex items-center gap-2"
+                >
+                  {t("footer.subscribe", "Subscribe")}
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-left">
+          
+          {/* Brand Column */}
           <motion.div
             variants={columnVariants}
             custom={0}
             initial="hidden"
             animate="visible"
+            className="space-y-4"
           >
-            <Link to="/" className="flex items-center space-x-2 mb-4">
+            <Link to="/" className="flex items-center space-x-2">
               <img src="/img/logo.png" alt="HealthConnect" className="h-10 w-auto" />
-              <span className="text-xl font-semibold text-gray-800">HealthConnect</span>
+              <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                HealthConnect
+              </span>
             </Link>
-            <p className="text-sm text-gray-600 max-w-xs">
-              HealthConnect helps patients find trusted doctors, book appointments instantly, and manage their healthcare with ease.
+            <p className="text-sm text-gray-500 leading-relaxed">
+              {t("footer.description", "HealthConnect is a modern healthcare platform that helps patients easily find trusted doctors and book appointments online.")}
             </p>
+            {/* Social Media Circular Links */}
+            <div className="flex space-x-3 pt-2">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-blue-100/50 hover:scale-110 active:scale-95"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm border border-blue-100/50 hover:scale-110 active:scale-95"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                  <rect x="2" y="9" width="4" height="12" />
+                  <circle cx="4" cy="4" r="2" />
+                </svg>
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-10 h-10 rounded-full bg-blue-50 text-pink-600 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all duration-300 shadow-sm border border-blue-100/50 hover:scale-110 active:scale-95"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </a>
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X (Twitter)"
+                className="w-10 h-10 rounded-full bg-blue-50 text-gray-700 flex items-center justify-center hover:bg-gray-900 hover:text-white transition-all duration-300 shadow-sm border border-blue-100/50 hover:scale-110 active:scale-95"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+            </div>
           </motion.div>
 
-          {/* Quick Links */}
+          {/* Quick Links Column */}
           <motion.div
             variants={columnVariants}
             custom={1}
             initial="hidden"
             animate="visible"
+            className="space-y-4"
           >
-            <h4 className="text-lg font-medium text-gray-800 mb-4">{t("footer.quickLinks")}</h4>
-            <ul className="space-y-2">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-gray-800">
+              {t("footer.quickLinks", "Quick Links")}
+            </h4>
+            <ul className="space-y-2.5 text-sm font-medium">
               <li>
-                <Link
-                  to="/"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.home")}
+                <Link to="/" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
+                  {t("footer.home", "Home")}
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/searchdoctors"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.findDoctors")}
+                <Link to="/searchdoctors" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
+                  {t("footer.findDoctors", "Find Doctors")}
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/aboutus"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.aboutUs")}
+                <Link to="/aboutus" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
+                  {t("footer.aboutUs", "About Us")}
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/contact"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.contact")}
+                <Link to="/contact" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
+                  {t("footer.contact", "Contact")}
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/faq"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.faq")}
+                <Link to="/searchdoctors" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
+                  {t("footer.bookAppointment", "Book Appointment")}
                 </Link>
               </li>
             </ul>
           </motion.div>
 
-          {/* Services */}
+          {/* Services Column */}
           <motion.div
             variants={columnVariants}
             custom={2}
             initial="hidden"
             animate="visible"
+            className="space-y-4"
           >
-            <h4 className="text-lg font-medium text-gray-800 mb-4">{t("footer.servicesTitle")}</h4>
-            <ul className="space-y-2">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-gray-800">
+              {t("footer.servicesTitle", "Services")}
+            </h4>
+            <ul className="space-y-2.5 text-sm font-medium">
               <li>
-                <Link
-                  to="/searchdoctors"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.findDoctor")}
-                </Link>
+                <span className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block cursor-default">
+                  {t("footer.generalConsultation", "General Consultation")}
+                </span>
               </li>
               <li>
-                <Link
-                  to="/booking"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.bookAppointment")}
-                </Link>
+                <span className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block cursor-default">
+                  {t("footer.specialistConsultation", "Specialist Consultation")}
+                </span>
               </li>
               <li>
-                <Link
-                  to="/consultation"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.onlineConsultation")}
-                </Link>
+                <span className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block cursor-default">
+                  {t("footer.onlineBooking", "Online Booking")}
+                </span>
               </li>
               <li>
-                <Link
-                  to="/specialists"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors underline underline-offset-2"
-                >
-                  {t("footer.medicalSpecialists")}
-                </Link>
+                <span className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block cursor-default">
+                  {t("footer.medicalFollowup", "Medical Follow-up")}
+                </span>
               </li>
               <li>
-                <span className="text-gray-400">{t("footer.healthArticles")}</span>
+                <span className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block cursor-default">
+                  {t("footer.healthcareSupport", "Healthcare Support")}
+                </span>
               </li>
             </ul>
           </motion.div>
 
-          {/* Newsletter */}
+          {/* Contact Column */}
           <motion.div
             variants={columnVariants}
             custom={3}
             initial="hidden"
             animate="visible"
+            className="space-y-4"
           >
-            <h4 className="text-lg font-medium text-gray-800 mb-4">{t("footer.stayUpdated")}</h4>
-            <p className="text-sm text-gray-600 mb-4">{t("footer.newsletterText")}</p>
-            <form className="flex flex-col sm:flex-row max-w-md">
-              <input
-                type="email"
-                placeholder={t("footer.emailPlaceholder")}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                aria-label="Email address"
-              />
-              <button
-                type="submit"
-                className="mt-2 sm:mt-0 sm:ml-2 px-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-              >
-                {t("footer.subscribe")}
-              </button>
-            </form>
+            <h4 className="text-sm font-bold uppercase tracking-wider text-gray-800">
+              {t("footer.contactTitle", "Contact Information")}
+            </h4>
+            <ul className="space-y-3.5 text-sm font-medium">
+              <li className="flex items-start gap-2.5">
+                <MapPin className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                <span className="text-gray-500">Casablanca, Morocco</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Mail className="w-5 h-5 text-blue-600 shrink-0" />
+                <a href="mailto:support@healthconnect.com" className="text-gray-500 hover:text-blue-600 transition-colors">
+                  support@healthconnect.com
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Phone className="w-5 h-5 text-blue-600 shrink-0" />
+                <span className="text-gray-500">+212 522 00 00 00</span>
+              </li>
+              <li className="flex items-center gap-2.5 border-t border-gray-100 pt-2.5 mt-2">
+                <Clock className="w-5 h-5 text-blue-600 shrink-0" />
+                <span className="text-gray-400 font-normal">Mon – Sat: 8:00 AM – 6:00 PM</span>
+              </li>
+            </ul>
           </motion.div>
         </div>
 
-        {/* Contact Information */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600">
-          <div className="flex items-start space-x-3">
-            <MapPin className="w-5 h-5 text-indigo-600" />
-            <p>Casablanca, Morocco</p>
-          </div>
-          <div className="flex items-start space-x-3">
-            <Mail className="w-5 h-5 text-indigo-600" />
-            <p>support@healthconnect.ma</p>
-          </div>
-          <div className="flex items-start space-x-3">
-            <Phone className="w-5 h-5 text-indigo-600" />
-            <p>+212 5XX XX XX XX</p>
-          </div>
-          <div className="flex items-start space-x-3">
-            <Clock className="w-5 h-5 text-indigo-600" />
-            <p>Mon – Sat: 8:00 AM – 6:00 PM</p>
-          </div>
-        </div>
+        {/* Divider Line */}
+        <hr className="my-10 border-gray-150" />
 
-        {/* Social Media */}
-        <div className="mt-8 flex space-x-4">
-          <motion.a
-            href="#"
-            aria-label="Facebook"
-            className="p-2 bg-gray-100 rounded-full hover:bg-indigo-600 hover:text-white transition-colors shadow-sm"
-            whileHover={iconHover}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-            </svg>
-          </motion.a>
-          <motion.a
-            href="#"
-            aria-label="Instagram"
-            className="p-2 bg-gray-100 rounded-full hover:bg-pink-600 hover:text-white transition-colors shadow-sm"
-            whileHover={iconHover}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-            </svg>
-          </motion.a>
-          <motion.a
-            href="#"
-            aria-label="LinkedIn"
-            className="p-2 bg-gray-100 rounded-full hover:bg-indigo-600 hover:text-white transition-colors shadow-sm"
-            whileHover={iconHover}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-              <rect x="2" y="9" width="4" height="12" />
-              <circle cx="4" cy="4" r="2" />
-            </svg>
-          </motion.a>
-          <motion.a
-            href="#"
-            aria-label="Twitter"
-            className="p-2 bg-gray-100 rounded-full hover:bg-gray-800 hover:text-white transition-colors shadow-sm"
-            whileHover={iconHover}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-            </svg>
-          </motion.a>
-          <motion.a
-            href="#"
-            aria-label="YouTube"
-            className="p-2 bg-gray-100 rounded-full hover:bg-red-600 hover:text-white transition-colors shadow-sm"
-            whileHover={iconHover}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-            </svg>
-          </motion.a>
-        </div>
-
-        {/* Bottom Footer */}
-        <div className="mt-12 border-t border-gray-200 pt-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-          <p>© {currentYear} HealthConnect. All Rights Reserved.</p>
-          <div className="flex flex-wrap items-center justify-center md:justify-end space-x-4 mt-2 md:mt-0">
-            <Link to="/privacy" className="hover:underline">{t("footer.privacyPolicy")}</Link>
-            <span className="border-l border-gray-300 h-4" />
-            <Link to="/terms" className="hover:underline">{t("footer.termsOfService")}</Link>
-            <span className="border-l border-gray-300 h-4" />
-            <Link to="/cookies" className="hover:underline">{t("footer.cookiePolicy")}</Link>
-            <span className="border-l border-gray-300 h-4" />
-            <span>{t("footer.academicNote")}</span>
-            <span className="border-l border-gray-300 h-4" />
-            <span>Developed for Academic Purposes (PFE Project)</span>
+        {/* Bottom Section */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-semibold text-gray-400">
+          <div className="space-y-1 text-center md:text-left">
+            <p>© {currentYear} HealthConnect. All rights reserved.</p>
+            <p className="font-normal text-[11px] text-gray-400/80">
+              {t("footer.academicNote", "Designed for educational purposes as a Final Year Project (PFE).")}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center">
+            <Link to="/privacy" className="hover:text-blue-600 transition-colors">
+              {t("footer.privacyPolicy", "Privacy Policy")}
+            </Link>
+            <Link to="/terms" className="hover:text-blue-600 transition-colors">
+              {t("footer.termsOfService", "Terms of Service")}
+            </Link>
+            <Link to="/cookies" className="hover:text-blue-600 transition-colors">
+              {t("footer.cookiePolicy", "Cookie Policy")}
+            </Link>
           </div>
         </div>
       </div>
