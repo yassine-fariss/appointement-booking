@@ -83,10 +83,22 @@ const Profile = () => {
     if (UserData.user?.id) {
       // 1. Fetch appointments
       axiosClient
-        .get(`/user/appointments/${UserData.user.id}`)
-        .then((res) => {
-          setAppointments(res.data || []);
-        })
+          .get(`/user/appointments/${UserData.user.id}`)
+          .then((res) => {
+            const appts = res.data || [];
+            // Sort: Confirmed first, then by most recent appointment date (date_appointment descending)
+            appts.sort((a, b) => {
+              const statusOrder = (status) => (status === 'Confirmed' ? 0 : 1);
+              const aStatus = statusOrder(a.status || a.status);
+              const bStatus = statusOrder(b.status || b.status);
+              if (aStatus !== bStatus) return aStatus - bStatus;
+              // Compare dates (newest first)
+              const aDate = new Date(a.date_appointment || a.created_at || 0);
+              const bDate = new Date(b.date_appointment || b.created_at || 0);
+              return bDate - aDate;
+            });
+            setAppointments(appts);
+          })
         .catch((err) => console.error("Error loading appointments:", err));
 
       // 2. Fetch doctors to mock favorites
