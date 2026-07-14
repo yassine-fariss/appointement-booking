@@ -9,6 +9,15 @@ const getBaseURL = () => {
     if (!/^https?:\/\//i.test(url)) {
       url = `https://${url}`;
     }
+    // If it is http and we are not on localhost, upgrade it to https to prevent redirect method-change issues
+    if (
+      typeof window !== "undefined" &&
+      window.location.hostname !== "localhost" &&
+      window.location.hostname !== "127.0.0.1" &&
+      url.startsWith("http://")
+    ) {
+      url = url.replace("http://", "https://");
+    }
     console.log('Axios base URL from env:', url);
     return url;
   }
