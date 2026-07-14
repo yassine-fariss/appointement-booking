@@ -7,13 +7,29 @@ const DatePicker = ({ setSelectedDate }) => {
 
   useEffect(() => {
     const datepickerEl = document?.getElementById("datepickerId");
+    
+    const handleChangeDate = (e) => {
+      // Flowbite datepicker updates the input value. We can grab it directly.
+      setSelectedDate(datepickerEl.value);
+    };
+
     if (datepickerEl) {
       new Datepicker(datepickerEl, {
         autohide: true,
         format: "yyyy-mm-dd",
       });
+      
+      // Add custom event listener for when date is selected via the calendar UI
+      datepickerEl.addEventListener("changeDate", handleChangeDate);
     }
-  }, []);
+    
+    // Cleanup listener to prevent memory leaks
+    return () => {
+      if (datepickerEl) {
+        datepickerEl.removeEventListener("changeDate", handleChangeDate);
+      }
+    };
+  }, [setSelectedDate]);
 
   return (
     <>
@@ -25,6 +41,7 @@ const DatePicker = ({ setSelectedDate }) => {
         placeholder={t("DatePicker.Select_Date")}
         id="datepickerId"
         onSelect={(e) => setSelectedDate(e.target.value)}
+        onChange={(e) => setSelectedDate(e.target.value)}
       />
     </>
   );
