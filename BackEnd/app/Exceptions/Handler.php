@@ -26,5 +26,25 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (Throwable $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'API Error: ' . $e->getMessage(),
+                    'exception' => get_class($e),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => collect($e->getTrace())->map(function ($item) {
+                        return [
+                            'file' => $item['file'] ?? null,
+                            'line' => $item['line'] ?? null,
+                            'function' => $item['function'] ?? null,
+                            'class' => $item['class'] ?? null,
+                        ];
+                    })->take(15)
+                ], 500);
+            }
+        });
     }
 }
