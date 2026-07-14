@@ -20,14 +20,6 @@ class DatabaseSeeder extends Seeder
   {
     $faker = \Faker\Factory::create();
 
-    // Disable foreign key checks for truncation
-    DB::statement('PRAGMA foreign_keys = OFF;');
-    Review::truncate();
-    Appointment::truncate();
-    Doctor::truncate();
-    User::truncate();
-    Admin::truncate();
-    DB::statement('PRAGMA foreign_keys = ON;');
 
     // 1. Seed Admin Account
     Admin::create([
