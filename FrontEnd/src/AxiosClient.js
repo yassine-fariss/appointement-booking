@@ -1,8 +1,24 @@
 import axios from "axios";
 import { get } from "./Services/LocalStorageService";
 
+const getBaseURL = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  // Check if we are running in the browser on a deployed production environment (e.g. Vercel)
+  if (
+    typeof window !== "undefined" &&
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
+  ) {
+    // Return the production Render backend API URL (using https to avoid mixed-content block)
+    return "https://docbook-backend.onrender.com/api";
+  }
+  return "http://127.0.0.1:8000/api";
+};
+
 const axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api",
+  baseURL: getBaseURL(),
 });
 
 axiosClient.interceptors.request.use((config) => {

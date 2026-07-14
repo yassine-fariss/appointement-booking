@@ -60,10 +60,60 @@ const SearchDoctors = () => {
       });
   }, [location.search]);
 
-  // Compute filter options dynamically from active dataset
-  const specialtiesList = ["All Specialties", ...new Set(allDoctors.map((d) => d.specialite).filter(Boolean))];
-  const citiesList = ["All Cities", ...new Set(allDoctors.map((d) => d.address_cabinet).filter(Boolean))];
-  const hospitalsList = ["All Hospitals", ...new Set(allDoctors.map((d) => d.nom_cabinet).filter(Boolean))];
+  // Compute filter options dynamically from active dataset, with fallback lists if empty
+  const fallbackSpecialties = [
+    "Cardiology",
+    "Dermatology",
+    "Neurology",
+    "Dentistry",
+    "Pediatrics",
+    "Orthopedics",
+    "General Medicine",
+    "Ophthalmology"
+  ];
+  const fallbackCities = [
+    "Casablanca",
+    "Rabat",
+    "Marrakech",
+    "Fès",
+    "Tanger",
+    "Agadir",
+    "Oujda",
+    "Meknès"
+  ];
+  const fallbackHospitals = [
+    "Centre Hospitalier Universitaire Ibn Rochd",
+    "Centre Hospitalier Universitaire Hassan II",
+    "Clinique Internationale de Marrakech",
+    "Clinique Internationale de Tanger",
+    "Hopital Militaire",
+    "Clinique Al Kawtar"
+  ];
+
+  const specialtiesList = [
+    "All Specialties",
+    ...new Set(
+      allDoctors.length > 0
+        ? allDoctors.map((d) => d.specialite).filter(Boolean)
+        : fallbackSpecialties
+    )
+  ];
+  const citiesList = [
+    "All Cities",
+    ...new Set(
+      allDoctors.length > 0
+        ? allDoctors.map((d) => d.address_cabinet).filter(Boolean)
+        : fallbackCities
+    )
+  ];
+  const hospitalsList = [
+    "All Hospitals",
+    ...new Set(
+      allDoctors.length > 0
+        ? allDoctors.map((d) => d.nom_cabinet).filter(Boolean)
+        : fallbackHospitals
+    )
+  ];
 
   // Fetch filtered doctors from the API whenever filters change
   useEffect(() => {
