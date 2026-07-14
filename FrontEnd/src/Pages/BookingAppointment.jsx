@@ -148,7 +148,7 @@ const BookingAppointment = () => {
 
   const handleConfirmBookingSubmit = (e) => {
     e.preventDefault();
-    if (!selectedDate || !selectedTime || !selectedType || !userData.user?.id) {
+    if (!selectedDate || !selectedTime || !selectedType || !userData.user?.id || !selectedDoctorId) {
       setBookingError("Missing configuration values. Please review steps.");
       return;
     }
@@ -172,8 +172,15 @@ const BookingAppointment = () => {
       .catch((err) => {
         console.error("Take appointment error:", err);
         let errMsg = "Failed to book appointment. Please verify details.";
+        if (!selectedDoctorId) {
+          errMsg = "Doctor not selected. Please choose a doctor before confirming the appointment.";
+        }
         if (err.response && err.response.status === 422) {
           errMsg = "This slot was just reserved by another patient. Please select a different slot.";
+        }
+        // Use server message if provided
+        if (err.response && err.response.data && err.response.data.message) {
+          errMsg = err.response.data.message;
         }
         setBookingError(errMsg);
         showToast(errMsg, "error");

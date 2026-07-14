@@ -28,7 +28,7 @@ class AppointmentManagementController extends Controller
     ]);
 
 
-    $this->validateWith($validator, $request);
+    $validator->validate();
 
 
     $data = $validator->validated();
