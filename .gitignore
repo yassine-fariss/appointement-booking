@@ -1,0 +1,3 @@
+# Ignore build artifacts and temporary files
+project.zip
+temp_zip/
