@@ -138,8 +138,9 @@ const SearchDoctors = () => {
         setLoading(false);
       })
       .catch((err) => {
+        setFilteredDoctors([]);
         if (err.response && err.response.status === 404) {
-          setFilteredDoctors([]);
+          // No doctors found is handled gracefully
         } else {
           console.error("Error fetching filtered doctors:", err);
         }

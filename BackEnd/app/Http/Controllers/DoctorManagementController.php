@@ -15,37 +15,38 @@ class DoctorManagementController extends Controller
   {
     $query = Doctor::query()->where('verified', 1);
 
-    // 1. Text Search (Name, Specialty, City, Hospital)
+    // 1. Text Search (Name, Specialty, City, Hospital) - explicitly case-insensitive & trimmed
     $searchQuery = $request->post('searchQuery');
     if (!empty($searchQuery)) {
-      $query->where(function ($q) use ($searchQuery) {
-        $q->where('firstname', 'LIKE', "%$searchQuery%")
-          ->orWhere('lastname', 'LIKE', "%$searchQuery%")
-          ->orWhere('specialite', 'LIKE', "%$searchQuery%")
-          ->orWhere('address_cabinet', 'LIKE', "%$searchQuery%")
-          ->orWhere('nom_cabinet', 'LIKE', "%$searchQuery%");
+      $trimmedSearch = strtolower(trim($searchQuery));
+      $query->where(function ($q) use ($trimmedSearch) {
+        $q->whereRaw('LOWER(firstname) LIKE ?', ["%$trimmedSearch%"])
+          ->orWhereRaw('LOWER(lastname) LIKE ?', ["%$trimmedSearch%"])
+          ->orWhereRaw('LOWER(specialite) LIKE ?', ["%$trimmedSearch%"])
+          ->orWhereRaw('LOWER(address_cabinet) LIKE ?', ["%$trimmedSearch%"])
+          ->orWhereRaw('LOWER(nom_cabinet) LIKE ?', ["%$trimmedSearch%"]);
       });
     }
 
-    // 2. Exact Filters
+    // 2. Exact Filters (Case-Insensitive & Trimmed)
     $specialite = $request->post('specialite');
     if (!empty($specialite) && $specialite !== 'All Specialties') {
-      $query->where('specialite', $specialite);
+      $query->whereRaw('LOWER(TRIM(specialite)) = ?', [strtolower(trim($specialite))]);
     }
 
     $city = $request->post('city');
     if (!empty($city) && $city !== 'All Cities') {
-      $query->where('address_cabinet', $city);
+      $query->whereRaw('LOWER(TRIM(address_cabinet)) = ?', [strtolower(trim($city))]);
     }
 
     $hospital = $request->post('hospital');
     if (!empty($hospital) && $hospital !== 'All Hospitals') {
-      $query->where('nom_cabinet', $hospital);
+      $query->whereRaw('LOWER(TRIM(nom_cabinet)) = ?', [strtolower(trim($hospital))]);
     }
 
     $gender = $request->post('gender');
     if (!empty($gender) && $gender !== 'Any') {
-      $query->where('gender', $gender);
+      $query->whereRaw('LOWER(TRIM(gender)) = ?', [strtolower(trim($gender))]);
     }
 
     $availability = $request->post('availability');
@@ -69,12 +70,14 @@ class DoctorManagementController extends Controller
       $query->where('rating', '>=', (float) $rating);
     }
 
-    // 4. JSON Array Filter (Languages)
+    // 4. JSON Array Filter (Languages) - DB Agnostic and robust
     $languages = $request->post('languages');
     if (!empty($languages) && is_array($languages)) {
       foreach ($languages as $lang) {
-        // Use JSON_CONTAINS for PostgreSQL or MySQL
-        $query->whereJsonContains('languages', $lang);
+        $trimmedLang = trim($lang);
+        if (!empty($trimmedLang)) {
+          $query->where('languages', 'LIKE', '%"' . $trimmedLang . '"%');
+        }
       }
     }
 
