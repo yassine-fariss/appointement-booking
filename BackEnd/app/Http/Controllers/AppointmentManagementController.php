@@ -60,7 +60,7 @@ class AppointmentManagementController extends Controller
         }
 
         Storage::disk('public')->put('pdf/' . $nameFile, $pdf->output());
-      } catch (\Exception $pdfError) {
+      } catch (\Throwable $pdfError) {
         // Log the PDF generation error, but don't fail the appointment creation
         \Log::error('PDF generation failed: ' . $pdfError->getMessage());
       }
