@@ -11,8 +11,8 @@ const getBaseURL = () => {
     window.location.hostname !== "localhost" &&
     window.location.hostname !== "127.0.0.1"
   ) {
-    // Return the production Render backend API URL (using https to avoid mixed-content block)
-    return "https://docbook-backend.onrender.com/api";
+    // Return the production Railway backend API URL (using https to avoid mixed-content block)
+    return "https://docbook-backend-production-1c06.up.railway.app/api";
   }
   return "http://127.0.0.1:8000/api";
 };
