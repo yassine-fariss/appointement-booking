@@ -17,52 +17,66 @@ class AppointmentManagementController extends Controller
 
   public function TakeAppointment(Request $request)
   {
+    try {
+      $validator = Validator::make($request->all(), [
+        'user_id' => 'required|exists:users,id',
+        'doctor_id' => 'required|exists:doctors,id',
+        'date_appointment' => 'required',
+        'time_appointment' => 'required',
+        'type_appointment' => 'required'
+      ]);
 
+      $validator->validate();
 
-    $validator = Validator::make($request->all(), [
-      'user_id' => 'required|exists:users,id',
-      'doctor_id' => 'required|exists:doctors,id',
-      'date_appointment' => 'required',
-      'time_appointment' => 'required',
-      'type_appointment' => 'required'
-    ]);
+      $data = $validator->validated();
 
+      $appointment = Appointment::create([
+        'user_id' => $data['user_id'],
+        'doctor_id' => $data['doctor_id'],
+        'date_appointment' => $data['date_appointment'],
+        'time_appointment' => $data['time_appointment'],
+        'type_appointment' => $data['type_appointment'],
+        'status' => 'Confirmed'
+      ]);
 
-    $validator->validate();
+      $doctor = Doctor::find($data['doctor_id']);
+      $user = User::find($data['user_id']);
 
+      $nameFile = null;
 
-    $data = $validator->validated();
+      $DataView = [
+        'doctor' => $doctor,
+        'user' => $user,
+        'appointment' => $appointment
+      ];
 
+      try {
+        $pdf = Pdf::loadView('Appointment', $DataView);
+        $nameFile = $user->firstname . time() . '.pdf';
 
-    $appointment = Appointment::create([
-      'user_id' => $data['user_id'],
-      'doctor_id' => $data['doctor_id'],
-      'date_appointment' => $data['date_appointment'],
-      'time_appointment' => $data['time_appointment'],
-      'type_appointment' => $data['type_appointment'],
-      'status' => 'Confirmed'
-    ]);
+        // Ensure the public disk pdf directory exists
+        if (!Storage::disk('public')->exists('pdf')) {
+          Storage::disk('public')->makeDirectory('pdf');
+        }
 
-    $doctor = Doctor::find($data['doctor_id']);
-    $user = User::find($data['user_id']);
+        Storage::disk('public')->put('pdf/' . $nameFile, $pdf->output());
+      } catch (\Exception $pdfError) {
+        // Log the PDF generation error, but don't fail the appointment creation
+        \Log::error('PDF generation failed: ' . $pdfError->getMessage());
+      }
 
-    $DataView = [
-      'doctor' => $doctor,
-      'user' => $user,
-      'appointment' => $appointment
-    ];
-
-
-    $pdf = Pdf::loadView('Appointment', $DataView);
-
-    $nameFile = $user->firstname . time() . '.pdf';
-
-    Storage::put('public/storage/pdf/' . $nameFile, $pdf->output());
-
-    return response([
-      'appointment' => $appointment,
-      "namefile" => $nameFile
-    ], 200);
+      return response([
+        'appointment' => $appointment,
+        "namefile" => $nameFile
+      ], 201);
+    } catch (\Exception $e) {
+      // Log the exception for debugging (could be stored in Laravel log)
+      \Log::error('TakeAppointment error: ' . $e->getMessage(), ['exception' => $e]);
+      return response([
+        'error' => 'Server error while processing appointment.',
+        'message' => $e->getMessage()
+      ], 500);
+    }
   }
 
 

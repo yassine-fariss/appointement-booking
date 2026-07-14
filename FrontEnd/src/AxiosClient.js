@@ -2,8 +2,15 @@ import axios from "axios";
 import { get } from "./Services/LocalStorageService";
 
 const getBaseURL = () => {
+  // Use explicit API URL if provided via environment variable
   if (process.env.REACT_APP_API_URL) {
-    return process.env.REACT_APP_API_URL;
+    let url = process.env.REACT_APP_API_URL;
+    // Ensure the URL contains a protocol (http:// or https://). If missing, prepend https://
+    if (!/^https?:\/\//i.test(url)) {
+      url = `https://${url}`;
+    }
+    console.log('Axios base URL from env:', url);
+    return url;
   }
   // Check if we are running in the browser on a deployed production environment (e.g. Vercel)
   if (
@@ -12,9 +19,13 @@ const getBaseURL = () => {
     window.location.hostname !== "127.0.0.1"
   ) {
     // Return the production Railway backend API URL (using https to avoid mixed-content block)
-    return "https://docbook-backend-production-1c06.up.railway.app/api";
+    const prodUrl = "https://docbook-backend-production-1c06.up.railway.app/api";
+    console.log('Axios base URL (prod):', prodUrl);
+    return prodUrl;
   }
-  return "http://127.0.0.1:8000/api";
+  const localUrl = "http://127.0.0.1:8000/api";
+  console.log('Axios base URL (local):', localUrl);
+  return localUrl;
 };
 
 const axiosClient = axios.create({

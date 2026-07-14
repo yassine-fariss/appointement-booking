@@ -170,20 +170,30 @@ const BookingAppointment = () => {
         setShowCompletedAppointment(true);
       })
       .catch((err) => {
-        console.error("Take appointment error:", err);
-        let errMsg = "Failed to book appointment. Please verify details.";
+        console.error('Take appointment error:', err);
+        let errMsg = 'Failed to book appointment. Please verify details.';
         if (!selectedDoctorId) {
-          errMsg = "Doctor not selected. Please choose a doctor before confirming the appointment.";
+          errMsg = 'Doctor not selected. Please choose a doctor before confirming the appointment.';
         }
+        // Validation errors (422) with details
         if (err.response && err.response.status === 422) {
-          errMsg = "This slot was just reserved by another patient. Please select a different slot.";
+          if (err.response.data && err.response.data.errors) {
+            const messages = Object.values(err.response.data.errors).flat().join(' ');
+            errMsg = messages || errMsg;
+          } else if (err.response.data && err.response.data.message) {
+            errMsg = err.response.data.message;
+          } else {
+            errMsg = 'Invalid input data. Please check your entries.';
+          }
         }
-        // Use server message if provided
+        // Use generic server message if provided
         if (err.response && err.response.data && err.response.data.message) {
           errMsg = err.response.data.message;
         }
+        // Log full error response for debugging
+        console.log('Full error response:', err.response);
         setBookingError(errMsg);
-        showToast(errMsg, "error");
+        showToast(errMsg, 'error');
       });
   };
 
