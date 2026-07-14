@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal } from "flowbite-react";
-import { Link } from "react-router-dom";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 
 const ComplitedAppointment = ({
