@@ -74,8 +74,8 @@ const AuthAdmin = () => {
     axiosClient
       .post("/admin/login", DataForm)
       .then(({ data }) => {
-        dispatch(loginSuccess(data));
         storeInLocalStorage("TOKEN_ADMIN", data.token);
+        dispatch(loginSuccess(data));
         
         // Handle Remember Me storage logic
         if (rememberMe) {

@@ -57,9 +57,8 @@ const Signup = () => {
       .post("/user/register", DataForm)
 
       .then(({ data }) => {
-        dispatch(signUpSuccess(data));
-
         storeInLocalStorage("TOKEN_USER", data.token);
+        dispatch(signUpSuccess(data));
         showToast("Registration successful! Welcome to DocAppoint.", "success");
         setLoading(false);
         navigate("/user/profile");

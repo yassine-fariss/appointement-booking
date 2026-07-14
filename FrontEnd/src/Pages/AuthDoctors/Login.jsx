@@ -80,8 +80,8 @@ const Login = () => {
     axiosClient
       .post("/doctor/login", DataForm)
       .then(({ data }) => {
-        dispatch(loginSuccess(data));
         storeInLocalStorage("TOKEN_DOCTOR", data.token);
+        dispatch(loginSuccess(data));
         
         // Handle Remember Me storage logic
         if (rememberMe) {

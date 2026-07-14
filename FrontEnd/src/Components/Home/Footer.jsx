@@ -178,7 +178,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/searchdoctors" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
+                <Link to="/recherche" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
                   {t("footer.findDoctors", "Find Doctors")}
                 </Link>
               </li>
@@ -193,7 +193,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/searchdoctors" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
+                <Link to="/recherche" className="text-gray-500 hover:text-blue-600 transition-colors duration-200 block">
                   {t("footer.bookAppointment", "Book Appointment")}
                 </Link>
               </li>

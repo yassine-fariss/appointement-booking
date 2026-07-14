@@ -59,9 +59,8 @@ const Signup = () => {
       .post("/doctor/register", DataForm)
 
       .then(({ data }) => {
-        dispatch(signUpSuccess(data));
-
         storeInLocalStorage("TOKEN_DOCTOR", data.token);
+        dispatch(signUpSuccess(data));
         showToast("Registration successful! Welcome, Doctor.", "success");
         setLoading(false);
         navigate("/doctor/dashboard");

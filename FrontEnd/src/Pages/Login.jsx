@@ -74,8 +74,8 @@ const Login = () => {
     axiosClient
       .post("/user/login", DataForm)
       .then(({ data }) => {
-        dispatch(loginSuccess(data));
         storeInLocalStorage("TOKEN_USER", data.token);
+        dispatch(loginSuccess(data));
         
         // Handle Remember Me storage logic
         if (rememberMe) {
