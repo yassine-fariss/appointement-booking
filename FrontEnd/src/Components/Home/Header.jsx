@@ -311,7 +311,7 @@ const Header = () => {
 
                 {userDropdownOpen && (
                   <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl border border-gray-100 shadow-xl py-3 z-50 animate-fade-in text-left">
-                    <div className="px-4 py-2 border-b border-gray-50 mb-2">
+                    <div className="px-4 py-2.5 border-b border-gray-50 mb-2 cursor-pointer" onClick={() => { setUserDropdownOpen(false); navigate('/user/profile?tab=dashboard'); }}>
                       <p className="text-sm font-bold text-gray-900 truncate">{userDetails.name}</p>
                       <p className="text-xs text-gray-400 truncate">{userDetails.email}</p>
                       <span className="inline-block bg-blue-50 text-blue-600 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase mt-1">
@@ -319,32 +319,65 @@ const Header = () => {
                       </span>
                     </div>
 
-                    <Link 
-                      to={isPatient ? "/user/profile?tab=dashboard" : userDetails.link} 
-                      onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
-                    >
-                      <UserCircleIcon className="w-5 h-5 text-gray-400" />
-                      Dashboard Portal
-                    </Link>
+                    {/* Dashboard Portal */}
+{isPatient ? (
+  <button
+    onClick={() => { setUserDropdownOpen(false); navigate('/user/profile?tab=dashboard'); }}
+    className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+  >
+    <UserCircleIcon className="w-5 h-5 text-gray-400" />
+    Dashboard Portal
+  </button>
+) : (
+  <Link
+    to={userDetails.link}
+    onClick={() => setUserDropdownOpen(false)}
+    className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+  >
+    <UserCircleIcon className="w-5 h-5 text-gray-400" />
+    Dashboard Portal
+  </Link>
+)}
 
-                    <Link 
-                      to={isPatient ? "/user/profile?tab=appointments" : userDetails.link}
-                      onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
-                    >
-                      <CalendarIcon className="w-5 h-5 text-gray-400" />
-                      Appointments
-                    </Link>
+                    {/* Appointments */}
+{isPatient ? (
+  <button
+    onClick={() => { setUserDropdownOpen(false); navigate('/user/profile?tab=appointments'); }}
+    className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+  >
+    <CalendarIcon className="w-5 h-5 text-gray-400" />
+    Appointments
+  </button>
+) : (
+  <Link
+    to={userDetails.link}
+    onClick={() => setUserDropdownOpen(false)}
+    className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+  >
+    <CalendarIcon className="w-5 h-5 text-gray-400" />
+    Appointments
+  </Link>
+)}
 
-                    <Link 
-                      to={isPatient ? "/user/profile?tab=settings" : userDetails.link}
-                      onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
-                    >
-                      <CogIcon className="w-5 h-5 text-gray-400" />
-                      Account Settings
-                    </Link>
+                    {/* Account Settings */}
+{isPatient ? (
+  <button
+    onClick={() => { setUserDropdownOpen(false); navigate('/user/profile?tab=settings'); }}
+    className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+  >
+    <CogIcon className="w-5 h-5 text-gray-400" />
+    Account Settings
+  </button>
+) : (
+  <Link
+    to={userDetails.link}
+    onClick={() => setUserDropdownOpen(false)}
+    className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+  >
+    <CogIcon className="w-5 h-5 text-gray-400" />
+    Account Settings
+  </Link>
+)}
 
                     <hr className="my-2 border-gray-50" />
 
