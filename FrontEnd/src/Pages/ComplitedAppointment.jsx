@@ -52,12 +52,11 @@ const ComplitedAppointment = ({
             <CheckCircleIcon className="w-16 h-16 mx-auto text-primary-600 " />
 
             <h3 className="mt-5 mb-6 text-lg text-gray-500 dark:text-gray-400">
-              pour obtenir un rendez vous , vous devez
-              <Link to="/connection" className=" text-primary-600 ">
-                {" "}
-                connecter{" "}
-              </Link>
-              !
+              Votre rendez-vous a été enregistré avec succès ! Vous pouvez maintenant télécharger et imprimer votre reçu.
+              <br />
+              <span className="text-sm text-gray-400 font-normal">
+                (Appointment successfully booked! You can now download and print your receipt.)
+              </span>
             </h3>
             <a
               href={"http://localhost:8000/storage/storage/pdf/" + FilePath}
